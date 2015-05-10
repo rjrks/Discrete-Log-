@@ -1,0 +1,70 @@
+#alpha=gamma^x
+def fun(alpha,gamma, prime,p,e):
+    x=[]   
+    gt=pow(gamma,(prime-1)/p,prime)
+    
+    for i in range(1,e+1):
+        pi=pow(p,i)
+        at=pow(alpha,(prime-1)/pi,prime)
+
+    #############################################
+    #baby step giant step by using hash map
+        flag=false
+        found=false
+        baby=dict()
+        baby[at%prime]=0
+        m=1+floor(sqrt(p))
+    
+    
+        for r in range(0,m):
+            tmp=(at*pow(gt,-r,prime))%prime
+            baby[tmp]=r
+            if(tmp==1):
+                x.append(r)
+                flag=true
+                found=true
+                break
+    
+        if (flag==false):
+            delta=pow(gt,m,prime)
+            for q in range(1,m):
+                 temp=pow(delta,q,prime)
+                 if(temp in baby):
+                     x.append(baby[temp]+m*q)
+                     found=true
+                     break
+                     
+        if(found==false):
+            return -1
+     #############################################
+        c1=((p^(i-1))*x[i-1])
+        t=pow(gamma,-c1,prime)
+        alpha=(alpha*t)%prime
+    
+    ans=0
+    for i in range(0,e):
+        ans=ans+x[i]*pow(p,i)
+
+    return ans 
+
+def dl(alpha,gamma,prime):
+    f=factor(prime-1)
+    a=[]
+    b=[]
+    for i in range(0,len(f)):
+        chk=fun(alpha,gamma,prime,f[i][0],f[i][1])
+        if(chk==-1):
+            continue
+        a.append(chk)
+        b.append(pow(f[i][0],f[i][1]))
+    
+    ans=crt(a,b)
+    if(pow(gamma,ans,prime)==(alpha%prime)):
+        return ans
+    return 'NOT_FOUND'    
+    
+
+#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*    
+#dl take arguments alpha,gamma,prime
+#alpha=gamma^x (mod prime)
+dl(3,5,2017)
